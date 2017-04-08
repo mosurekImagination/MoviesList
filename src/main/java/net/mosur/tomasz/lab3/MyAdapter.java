@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import java.util.ArrayList;
 
 /**
@@ -18,7 +19,8 @@ public class MyAdapter extends RecyclerView.Adapter{
     private ArrayList <Movie> movies= new ArrayList<>();
     private RecyclerView recyclerView;
     private Resources resources;
-
+    static final int LEFT_SIDE = 0;
+    static final int RIGHT_SIDE = 1;
 
     private class MyViewHolder extends RecyclerView.ViewHolder
     {
@@ -44,15 +46,25 @@ public class MyAdapter extends RecyclerView.Adapter{
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.movie_layout, parent, false);
-
+        View view;
+        if (viewType==LEFT_SIDE) {
+             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_layout, parent, false);
+        }
+        else
+        {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_layout_right, parent, false);
+        }
         return new MyViewHolder(view);
     }
 
     @Override
+    public int getItemViewType(int position) {
+        return position % 2 == 0 ? LEFT_SIDE : RIGHT_SIDE;
+    }
+
+    @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-    Movie movie = movies.get(position);
+         Movie movie = movies.get(position);
         int imgId= resources.getIdentifier("mid"+String.valueOf(movie.getId()), "drawable", recyclerView.getContext().getPackageName());
         ((MyViewHolder)holder).movie_image.setImageDrawable(recyclerView.getContext().getDrawable(imgId));
         ((MyViewHolder)holder).movie_title.setText(movie.getTitle());

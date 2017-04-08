@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
             movies.add(new Movie("Fast & Furious", 2002, "Sci-fi", 3));
             movies.add(new Movie("Gone with the Wind", 1956, "Dramatic", 4));
         }
-
         return movies;
     }
 }
