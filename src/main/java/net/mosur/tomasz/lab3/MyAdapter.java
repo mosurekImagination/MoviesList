@@ -140,7 +140,7 @@ public class MyAdapter extends RecyclerView.Adapter {
         movies.remove(position);
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, getItemCount());
-    }
+
 
     @Override
     public int getItemCount() {
