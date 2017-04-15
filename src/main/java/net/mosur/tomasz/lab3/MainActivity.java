@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        ArrayList<Movie> movies = generateMovies(10);
+        ArrayList<Movie> movies = generateMovies(1);
 
         recyclerView.setAdapter(new MyAdapter(movies, recyclerView));
     }
@@ -29,6 +29,15 @@ public class MainActivity extends AppCompatActivity {
     {
 
         ArrayList<Movie> movies = new ArrayList<>();
+
+        Movie watched = new Movie("Terminatory", 1998, "Action", 1);
+        watched.toWatchSwitch();
+        Movie to_watch = new Movie("Terminators", 1998, "Action", 1);
+        to_watch.watchedSwitch();
+        movies.add(to_watch);
+        movies.add(to_watch);
+        movies.add(watched);
+        movies.add(to_watch);
 
         for(int i=0; i<loops; i++) { //USE ID FROM 1 TO 4 BECAUSE ONLY 4 IMAGES WERE UPLOADED TO TEST
             movies.add(new Movie("Terminator", 1998, "Action", 1));
