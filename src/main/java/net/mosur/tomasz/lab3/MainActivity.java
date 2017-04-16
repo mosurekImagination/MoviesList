@@ -11,11 +11,12 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    
     MyAdapter myAdapter;
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        myAdapter.setItemRate(data.getIntExtra("position", 0), data.getFloatExtra("rating", 0));
+    protected void onActivityResult(int requestCode, int resultCode, Intent ratedIntent) {
+        super.onActivityResult(requestCode, resultCode, ratedIntent);
+        myAdapter.setItemRate(ratedIntent.getIntExtra("position", 0), ratedIntent.getFloatExtra("rating", 0));
     }
 
 
@@ -24,11 +25,11 @@ public class MainActivity extends AppCompatActivity {
         outState.putParcelableArrayList("movies", myAdapter.getMovies());
         super.onSaveInstanceState(outState);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //setContentView(R.layout.movie_description);
         setTitle("Movies List");
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.movies_list);
         recyclerView.setHasFixedSize(true);       // OPTIMISATION
@@ -44,16 +45,6 @@ public class MainActivity extends AppCompatActivity {
     {
 
         ArrayList<Movie> movies = new ArrayList<>();
-
-        Movie watched = new Movie("Terminato", 1998, "Action", 1);
-        watched.setRating(4);
-        watched.switchToWatch();
-        Movie to_watch = new Movie("Terminators", 1998, "Action", 1);
-        to_watch.switchToWatch();
-        movies.add(to_watch);
-        movies.add(to_watch);
-        movies.add(watched);
-        movies.add(to_watch);
 
         for(int i=0; i<loops; i++) { //USE ID FROM 1 TO 4 BECAUSE ONLY 4 IMAGES WERE UPLOADED TO TEST
             movies.add(new Movie("Terminator", 1998, "Action", 1));

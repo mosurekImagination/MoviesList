@@ -69,6 +69,7 @@ public class MyAdapter extends RecyclerView.Adapter {
     {
         movies.get(position).setRating(rate);
     }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
@@ -83,9 +84,6 @@ public class MyAdapter extends RecyclerView.Adapter {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-/*                Movie movie = movies.get(recyclerView.getChildAdapterPosition(v));
-                movie.switchToWatch();
-                updateWatchStateImage(recyclerView.getChildViewHolder(v), movie);*/
 
                 Intent it = new Intent(recyclerView.getContext(), MovieActivity.class);
                 it.putExtra("movie", movies.get(recyclerView.getChildAdapterPosition(v)));
@@ -98,7 +96,7 @@ public class MyAdapter extends RecyclerView.Adapter {
             @Override
             public boolean onLongClick(View v) {
                 Movie movie = movies.get(recyclerView.getChildAdapterPosition(v));
-                movie.switchWatched();
+                movie.switchToWatch();
                 updateWatchStateImage(recyclerView.getChildViewHolder(v), movie);
                 return true;
             }
@@ -128,23 +126,19 @@ public class MyAdapter extends RecyclerView.Adapter {
 
     private void updateWatchStateImage(RecyclerView.ViewHolder holder, Movie movie) {
 
-        if(movie.getWatchState() != Movie.WATCH_CLEAR)
+        if(movie.getToWatch() == Movie.TO_WATCH)
         {
-            if( (holder).getItemViewType() == LEFT_SIDE )
+            if(holder.getItemViewType() == LEFT_SIDE )
                 ((MyViewHolder)holder).movie_year.setPadding(0,0,150,0); // to avoid collision
 
-            int status_image_id = movie.getWatchState() == Movie.TO_WATCH ?  //
-                    resources.getIdentifier("towatch", "drawable", recyclerView.getContext().getPackageName())
-                    :
-                    resources.getIdentifier("watched", "drawable", recyclerView.getContext().getPackageName());
-
-            ((MyViewHolder)holder).watch_status.setImageResource(status_image_id);
+            ((MyViewHolder)holder).watch_status.setImageResource(
+                    resources.getIdentifier("towatch", "drawable", recyclerView.getContext().getPackageName()));
             ((MyViewHolder)holder).watch_status.setVisibility(View.VISIBLE);
         }
         else
         {
             ((MyViewHolder)holder).watch_status.setVisibility(View.INVISIBLE);
-            if((holder).getItemViewType() == LEFT_SIDE )
+            if(holder.getItemViewType() == LEFT_SIDE )
                 ((MyViewHolder)holder).movie_year.setPadding(0,0,0,0);
         }
     }
