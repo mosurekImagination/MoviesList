@@ -1,6 +1,9 @@
 package net.mosur.tomasz.lab3;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
@@ -23,8 +26,14 @@ public class MyAdapter extends RecyclerView.Adapter {
     private Resources resources;
     static final int LEFT_SIDE = 0;
     static final int RIGHT_SIDE = 1;
-    ItemTouchHelper.Callback touchCallback;
-    ItemTouchHelper itemTouchHelper;
+    private ItemTouchHelper.Callback touchCallback;
+    private ItemTouchHelper itemTouchHelper;
+
+
+    public ArrayList<Movie> getMovies() {
+        return movies;
+    }
+
     private class MyViewHolder extends RecyclerView.ViewHolder
     {
 
@@ -56,6 +65,10 @@ public class MyAdapter extends RecyclerView.Adapter {
     }
 
 
+    public void setItemRate(int position, float rate)
+    {
+        movies.get(position).setRating(rate);
+    }
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
@@ -70,9 +83,14 @@ public class MyAdapter extends RecyclerView.Adapter {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Movie movie = movies.get(recyclerView.getChildAdapterPosition(v));
-                movie.toWatchSwitch();
-                updateWatchStateImage(recyclerView.getChildViewHolder(v), movie);
+/*                Movie movie = movies.get(recyclerView.getChildAdapterPosition(v));
+                movie.switchToWatch();
+                updateWatchStateImage(recyclerView.getChildViewHolder(v), movie);*/
+
+                Intent it = new Intent(recyclerView.getContext(), MovieActivity.class);
+                it.putExtra("movie", movies.get(recyclerView.getChildAdapterPosition(v)));
+                it.putExtra("position", recyclerView.getChildAdapterPosition(v));
+                ((Activity) recyclerView.getContext()).startActivityForResult(it,1);
             }
         });
 
@@ -80,7 +98,7 @@ public class MyAdapter extends RecyclerView.Adapter {
             @Override
             public boolean onLongClick(View v) {
                 Movie movie = movies.get(recyclerView.getChildAdapterPosition(v));
-                movie.watchedSwitch();
+                movie.switchWatched();
                 updateWatchStateImage(recyclerView.getChildViewHolder(v), movie);
                 return true;
             }
@@ -94,6 +112,7 @@ public class MyAdapter extends RecyclerView.Adapter {
         return position % 2 == 0 ? LEFT_SIDE : RIGHT_SIDE;
     }
 
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
          Movie movie = movies.get(position);
@@ -103,7 +122,6 @@ public class MyAdapter extends RecyclerView.Adapter {
         ((MyViewHolder)holder).movie_title.setText(movie.getTitle());
         ((MyViewHolder)holder).movie_year.setText(String.valueOf(movie.getYear()));
         ((MyViewHolder)holder).movie_genre.setText(movie.getGenre());
-
         updateWatchStateImage(holder, movie);
     }
 
@@ -113,25 +131,20 @@ public class MyAdapter extends RecyclerView.Adapter {
         if(movie.getWatchState() != Movie.WATCH_CLEAR)
         {
             if( (holder).getItemViewType() == LEFT_SIDE )
-                ((MyViewHolder)holder).movie_year.setPadding(0,0,150,0);
+                ((MyViewHolder)holder).movie_year.setPadding(0,0,150,0); // to avoid collision
 
-            if (movie.getWatchState() == Movie.TO_WATCH)
-            {
-                int status_image_id = resources.getIdentifier("towatch", "drawable", recyclerView.getContext().getPackageName());
-                ((MyViewHolder) holder).watch_status.setImageResource(status_image_id);
-            }
-            else // WATCHED
-            {
-                int status_image_id = resources.getIdentifier("watched", "drawable", recyclerView.getContext().getPackageName());
-                ((MyViewHolder) holder).watch_status.setImageResource(status_image_id);
-            }
+            int status_image_id = movie.getWatchState() == Movie.TO_WATCH ?  //
+                    resources.getIdentifier("towatch", "drawable", recyclerView.getContext().getPackageName())
+                    :
+                    resources.getIdentifier("watched", "drawable", recyclerView.getContext().getPackageName());
 
+            ((MyViewHolder)holder).watch_status.setImageResource(status_image_id);
             ((MyViewHolder)holder).watch_status.setVisibility(View.VISIBLE);
         }
         else
         {
             ((MyViewHolder)holder).watch_status.setVisibility(View.INVISIBLE);
-            if( (holder).getItemViewType() == LEFT_SIDE )
+            if((holder).getItemViewType() == LEFT_SIDE )
                 ((MyViewHolder)holder).movie_year.setPadding(0,0,0,0);
         }
     }
@@ -140,7 +153,7 @@ public class MyAdapter extends RecyclerView.Adapter {
         movies.remove(position);
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, getItemCount());
-
+    }
 
     @Override
     public int getItemCount() {

@@ -1,5 +1,6 @@
 package net.mosur.tomasz.lab3;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -10,19 +11,33 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    MyAdapter myAdapter;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        myAdapter.setItemRate(data.getIntExtra("position", 0), data.getFloatExtra("rating", 0));
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList("movies", myAdapter.getMovies());
+        super.onSaveInstanceState(outState);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //setContentView(R.layout.movie_description);
         setTitle("Movies List");
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.movies_list);
         recyclerView.setHasFixedSize(true);       // OPTIMISATION
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        ArrayList<Movie> movies = generateMovies(1);
-
-        recyclerView.setAdapter(new MyAdapter(movies, recyclerView));
+        ArrayList<Movie> movies = generateMovies(10);
+        myAdapter = new MyAdapter(movies, recyclerView);
+        recyclerView.setAdapter(myAdapter);
     }
 
     public static ArrayList<Movie> generateMovies(int loops)
@@ -30,10 +45,11 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<Movie> movies = new ArrayList<>();
 
-        Movie watched = new Movie("Terminatory", 1998, "Action", 1);
-        watched.toWatchSwitch();
+        Movie watched = new Movie("Terminato", 1998, "Action", 1);
+        watched.setRating(4);
+        watched.switchToWatch();
         Movie to_watch = new Movie("Terminators", 1998, "Action", 1);
-        to_watch.watchedSwitch();
+        to_watch.switchToWatch();
         movies.add(to_watch);
         movies.add(to_watch);
         movies.add(watched);
