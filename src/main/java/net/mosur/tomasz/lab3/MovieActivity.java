@@ -1,5 +1,8 @@
 package net.mosur.tomasz.lab3;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcel;
@@ -22,38 +25,52 @@ import static java.security.AccessController.getContext;
 
 public class MovieActivity extends AppCompatActivity {
 
-    @BindView(R.id.moviedesc_image)ImageView baner;
+/*    @BindView(R.id.moviedesc_image)ImageView baner;
     @BindView(R.id.moviedesc_desc)TextView description;
     @BindView(R.id.moviedesc_rating)RatingBar rating;
     @BindView(R.id.moviedesc_title) TextView title;
-    Movie movie;
+    Movie movie;*/
     int position;
+
+    float rating;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.movie_description);
-        ButterKnife.bind(this);
-        movie = getIntent().getParcelableExtra("movie");
         position = getIntent().getIntExtra("position",0);
-        setData();
-//        ActionBar a = getSupportActionBar();
-//        a.setDisplayHomeAsUpEnabled(false);
+        setContentView(R.layout.movie_description);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        MovieDescriptionF MovieDescriptionF = new MovieDescriptionF();
+        MovieDescriptionF.setArguments(getMovieBundle());
+        fragmentTransaction.add(R.id.baner_fragment_place, MovieDescriptionF);
+        fragmentTransaction.commit();
     }
 
-    public void setData()
+/*    public void setData()
     {
         int imgId= getResources().getIdentifier("baner"+String.valueOf(movie.getId()), "drawable", getPackageName());
         baner.setImageDrawable(getDrawable(imgId));
         title.setText(movie.getTitle());
         description.setText(movie.getDescription());
         rating.setRating(movie.getRating());
+
+    }*/
+
+    public void setRating(float r)
+    {
+        rating = r;
     }
-
-
+    public Bundle getMovieBundle()
+    {
+        Bundle bundle = new Bundle();
+        bundle.putInt("position", getIntent().getIntExtra("position",0));
+        bundle.putParcelable("movie", getIntent().getParcelableExtra("movie"));
+        return bundle;
+    }
     @Override
     public void onBackPressed() {
         Intent it = new Intent();
-        it.putExtra("rating", rating.getRating());
+        it.putExtra("rating", rating);
         it.putExtra("position", position);
         setResult(RESULT_OK,it);
         finish();

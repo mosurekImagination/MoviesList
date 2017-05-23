@@ -17,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent ratedIntent) {
         super.onActivityResult(requestCode, resultCode, ratedIntent);
         myAdapter.setItemRate(ratedIntent.getIntExtra("position", 0), ratedIntent.getFloatExtra("rating", 0));
+        int a = ratedIntent.getIntExtra("position", 0);
+        float b = ratedIntent.getFloatExtra("rating", 0);
     }
 
 
