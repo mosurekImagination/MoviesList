@@ -63,8 +63,11 @@ public class MovieActivity extends AppCompatActivity {
     public Bundle getMovieBundle()
     {
         Bundle bundle = new Bundle();
+        Movie movie = getIntent().getParcelableExtra("movie");
+        int imgId= getResources().getIdentifier("baner"+String.valueOf(movie.getId()), "drawable", getPackageName());
         bundle.putInt("position", getIntent().getIntExtra("position",0));
-        bundle.putParcelable("movie", getIntent().getParcelableExtra("movie"));
+        bundle.putParcelable("movie", movie);
+        bundle.putInt("imgId", imgId);
         return bundle;
     }
     @Override

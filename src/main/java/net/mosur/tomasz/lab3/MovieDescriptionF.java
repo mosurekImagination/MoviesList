@@ -28,7 +28,7 @@ public class MovieDescriptionF extends Fragment {
     @BindView(R.id.moviedesc_title) TextView title;
     Movie movie;
     int position;
-    Drawable banner;
+    int imgId;
 
     public MovieDescriptionF() {
     }
@@ -46,7 +46,7 @@ public class MovieDescriptionF extends Fragment {
         View view = inflater.inflate(R.layout.fragment_movie_description, container, false);
         movie = getArguments().getParcelable("movie");
         position = getArguments().getInt("position", 0);
-        banner = getArguments().getParcelable("banner");
+        imgId = getArguments().getInt("imgId");
         ButterKnife.bind(this, view);
         setData();
 
@@ -72,11 +72,13 @@ public class MovieDescriptionF extends Fragment {
 
     public void setData()
     {
-       // baner.setImageDrawable(banner);
+        baner.setImageDrawable(getActivity().getDrawable(imgId));
         title.setText(movie.getTitle());
         description.setText(movie.getDescription());
         rating.setRating(movie.getRating());
 
     }
+
+
 
 }

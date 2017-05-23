@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(myAdapter);
     }
 
+
     public static ArrayList<Movie> generateMovies(int loops)
     {
 

@@ -1,0 +1,78 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=""
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent">
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    tools:context="net.mosur.tomasz.lab3.MovieImagesF2">
+
+    <ImageView
+        android:id="@+id/mAImage1"
+        android:src="@drawable/baner1"
+        android:layout_marginTop="10dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="40dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="20dp"/>
+
+    <TextView
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et mollis mi, in venenatis urna. Mauris eu nunc consequat eros facilisis posuere."
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginRight="20dp"
+        android:maxHeight="140dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@id/mAImage1"/>
+
+    <ImageView
+        android:id="@+id/mAImage2"
+        android:src="@drawable/baner2"
+        android:layout_below="@+id/mAImage1"
+        android:layout_marginTop="10dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="40dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="20dp"/>
+
+    <TextView
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et mollis mi, in venenatis urna. Mauris eu nunc consequat eros facilisis posuere."
+        android:layout_width="match_parent"
+        android:layout_below="@+id/mAImage1"
+        android:layout_height="100dp"
+        android:layout_marginRight="20dp"
+        android:maxHeight="140dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@id/mAImage2"/>
+
+    <ImageView
+        android:id="@+id/mAImage3"
+        android:layout_below="@+id/mAImage2"
+        android:src="@drawable/baner3"
+        android:layout_marginTop="10dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="40dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="20dp"/>
+
+    <TextView
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et mollis mi, in venenatis urna. Mauris eu nunc consequat eros facilisis posuere."
+        android:layout_below="@+id/mAImage2"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginRight="20dp"
+        android:maxHeight="140dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@id/mAImage3"/>
+
+</RelativeLayout>
+</ScrollView>
