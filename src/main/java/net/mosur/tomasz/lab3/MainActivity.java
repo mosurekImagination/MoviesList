@@ -6,6 +6,10 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -17,8 +21,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent ratedIntent) {
         super.onActivityResult(requestCode, resultCode, ratedIntent);
         myAdapter.setItemRate(ratedIntent.getIntExtra("position", 0), ratedIntent.getFloatExtra("rating", 0));
-        int a = ratedIntent.getIntExtra("position", 0);
-        float b = ratedIntent.getFloatExtra("rating", 0);
     }
 
 
@@ -56,5 +58,30 @@ public class MainActivity extends AppCompatActivity {
             movies.add(new Movie("Gone with the Wind", 1956, "Dramatic", 4));
         }
         return movies;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.backEraseB:
+                if(myAdapter.getLastDeleted()!= null) {
+                    myAdapter.addMovie(myAdapter.getLastDeleted());
+                    myAdapter.notifyDataSetChanged();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(),"Nie usunięto filmu", Toast.LENGTH_SHORT).show();}
+                return true;
+            default:
+
+                return true;
+        }
     }
 }

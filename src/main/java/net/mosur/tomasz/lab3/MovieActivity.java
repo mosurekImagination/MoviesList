@@ -1,23 +1,17 @@
 package net.mosur.tomasz.lab3;
 
-import android.support.v4.app.Fragment;
+import android.content.Context;
+import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ImageView;
-import android.widget.RatingBar;
-import android.widget.TextView;
+import android.util.AttributeSet;
+import android.view.View;
 
-import org.w3c.dom.Text;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-import static java.security.AccessController.getContext;
+import java.util.Random;
 
 /**
  * Created by Tomek on 16/04/2017.
@@ -25,53 +19,56 @@ import static java.security.AccessController.getContext;
 
 public class MovieActivity extends AppCompatActivity {
 
-/*    @BindView(R.id.moviedesc_image)ImageView baner;
-    @BindView(R.id.moviedesc_desc)TextView description;
-    @BindView(R.id.moviedesc_rating)RatingBar rating;
-    @BindView(R.id.moviedesc_title) TextView title;
-    Movie movie;*/
-    int position;
 
+    int position;
     float rating;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        position = getIntent().getIntExtra("position",0);
+        position = getIntent().getIntExtra("position", 0);
         setContentView(R.layout.movie_description);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        MovieDescriptionF MovieDescriptionF = new MovieDescriptionF();
-        MovieDescriptionF.setArguments(getMovieBundle());
-        fragmentTransaction.add(R.id.baner_fragment_place, MovieDescriptionF);
-        fragmentTransaction.commit();
-    }
-
-/*    public void setData()
-    {
-        int imgId= getResources().getIdentifier("baner"+String.valueOf(movie.getId()), "drawable", getPackageName());
-        baner.setImageDrawable(getDrawable(imgId));
-        title.setText(movie.getTitle());
-        description.setText(movie.getDescription());
-        rating.setRating(movie.getRating());
-
-    }*/
+        setTitle(((Movie)getIntent().getParcelableExtra("movie")).getTitle());
+        if(savedInstanceState == null) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            MovieDescriptionF MovieDescriptionF = new MovieDescriptionF();
+            MovieDescriptionF.setArguments(getMovieBundle());
+            fragmentTransaction.add(R.id.baner_fragment_place, MovieDescriptionF, "MovieDF");
+            fragmentTransaction.addToBackStack("first");  //234234234
+            fragmentTransaction.commit();
+        }
+        }
 
     public void setRating(float r)
     {
         rating = r;
     }
+
     public Bundle getMovieBundle()
     {
         Bundle bundle = new Bundle();
         Movie movie = getIntent().getParcelableExtra("movie");
-        int imgId= getResources().getIdentifier("baner"+String.valueOf(movie.getId()), "drawable", getPackageName());
         bundle.putInt("position", getIntent().getIntExtra("position",0));
         bundle.putParcelable("movie", movie);
+
+        int imgId= getResources().getIdentifier("baner"+String.valueOf(movie.getId()), "drawable", getPackageName());
         bundle.putInt("imgId", imgId);
+
+
+        //put 9 Film images
+        Random random = new Random();
+        for(int i=0; i<9; i++) {
+            int rand = random.nextInt(9);
+            int mImg = getResources().getIdentifier("mimg" + rand , "drawable", getPackageName());
+            bundle.putInt("mimg" + String.valueOf(i), mImg);
+        }
         return bundle;
     }
+
     @Override
     public void onBackPressed() {
+
         Intent it = new Intent();
         it.putExtra("rating", rating);
         it.putExtra("position", position);
@@ -79,4 +76,15 @@ public class MovieActivity extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        outState.putFloat("rate", rating);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        rating = savedInstanceState.getFloat("rate");
+    }
 }

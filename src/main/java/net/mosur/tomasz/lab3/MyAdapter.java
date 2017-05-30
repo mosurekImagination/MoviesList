@@ -22,6 +22,7 @@ import java.util.ArrayList;
 public class MyAdapter extends RecyclerView.Adapter {
 
     private ArrayList <Movie> movies= new ArrayList<>();
+    Movie lastDeleted;
     private RecyclerView recyclerView;
     private Resources resources;
     static final int LEFT_SIDE = 0;
@@ -43,6 +44,7 @@ public class MyAdapter extends RecyclerView.Adapter {
         TextView movie_year;
         ImageView watch_status;
 
+
         public MyViewHolder(View itemView) {
             super(itemView);
             movie_image = (ImageView)itemView.findViewById(R.id.movie_image);
@@ -62,6 +64,7 @@ public class MyAdapter extends RecyclerView.Adapter {
         touchCallback = new MovieListTouch(this);
         itemTouchHelper= new ItemTouchHelper(touchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
+
     }
 
 
@@ -144,6 +147,8 @@ public class MyAdapter extends RecyclerView.Adapter {
     }
 
     public void onItemDismiss(int position) {
+
+        lastDeleted = (movies.get(position));
         movies.remove(position);
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, getItemCount());
@@ -154,5 +159,13 @@ public class MyAdapter extends RecyclerView.Adapter {
         return movies.size();
     }
 
+    public Movie getLastDeleted() {
+        return lastDeleted;
+    }
 
+    public void addMovie(Movie m)
+    {
+        movies.add(0,m);
+        lastDeleted= null;
+    }
 }
